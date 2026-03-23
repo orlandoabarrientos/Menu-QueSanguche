@@ -32,6 +32,8 @@
             --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.09);
             --font-display: 'Biker From Hell', 'Inter', sans-serif;
             --font-base: 'Inter', sans-serif;
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
         }
 
         /* ═══ RESET ══════════════════════════════════════════════════════ */
@@ -72,6 +74,18 @@
             min-height: 100dvh;
         }
 
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--safe-top);
+            background: var(--hero-nav);
+            z-index: 180;
+            pointer-events: none;
+        }
+
         /* ═══ NOISE OVERLAY ══════════════════════════════════════════════ */
         body::after {
             content: '';
@@ -87,7 +101,7 @@
         /* ═══ HEADER ══════════════════════════════════════════════════════ */
         .header {
             background: var(--hero-nav);
-            padding: calc(env(safe-area-inset-top) + 14px) 20px 14px;
+            padding: calc(var(--safe-top) + 14px) 20px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -572,7 +586,10 @@
         /* ═══ MODAL OVERLAY ═══════════════════════════════════════════════ */
         .overlay {
             position: fixed;
-            inset: 0;
+            top: calc(-1 * var(--safe-top));
+            left: 0;
+            right: 0;
+            height: calc(100% + var(--safe-top));
             background: rgba(0, 0, 0, 0.65);
             z-index: 500;
             opacity: 0;
@@ -1074,11 +1091,15 @@
             flex-direction: column;
             justify-content: flex-end;
             pointer-events: none;
+            overflow: hidden;
         }
 
         .cart-overlay {
-            position: absolute;
-            inset: 0;
+            position: fixed;
+            top: calc(-1 * var(--safe-top));
+            left: 0;
+            right: 0;
+            height: calc(100% + var(--safe-top));
             background: rgba(0, 0, 0, 0.7);
             opacity: 0;
             transition: opacity .3s;
@@ -1089,8 +1110,8 @@
             position: relative;
             background: var(--white);
             border-radius: 24px 24px 0 0;
-            padding: 0 0 calc(env(safe-area-inset-bottom) + 20px);
-            transform: translateY(100%);
+            padding: 0;
+            transform: translateY(calc(100% + 48px));
             transition: transform .4s cubic-bezier(.32, .72, 0, 1);
             max-height: 90dvh;
             display: flex;
@@ -1243,7 +1264,7 @@
         }
 
         .cart-footer {
-            padding: 16px 24px;
+            padding: 16px 24px calc(16px + var(--safe-bottom));
             border-top: 1px solid var(--cream-dk);
         }
 
@@ -1518,7 +1539,7 @@
                 max-width: 540px;
                 left: 50%;
                 right: auto;
-                transform: translateX(-50%) translateY(100%);
+                transform: translateX(-50%) translateY(calc(100% + 48px));
             }
 
             .modal.open,
@@ -2084,7 +2105,7 @@
                         pills.forEach(p => p.classList.remove('active'));
                         pills[idx].classList.add('active');
                         if (!navUserInteracting) {
-                            pills[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                            pills[idx].scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
                         }
                     }
                 });
