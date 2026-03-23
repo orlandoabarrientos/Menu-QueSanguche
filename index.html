@@ -72,6 +72,19 @@
             min-height: 100dvh;
         }
 
+        /* ═══ NOTCH COVER ═════════════════════════════════════════════════ */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: env(safe-area-inset-top, 0px);
+            background: var(--hero-nav);
+            z-index: 199;
+            pointer-events: none;
+        }
+
         /* ═══ NOISE OVERLAY ══════════════════════════════════════════════ */
         body::after {
             content: '';
@@ -578,7 +591,10 @@
         /* ═══ MODAL OVERLAY ═══════════════════════════════════════════════ */
         .overlay {
             position: fixed;
-            inset: 0;
+            top: -60px;
+            left: -60px;
+            right: -60px;
+            bottom: -60px;
             background: rgba(0, 0, 0, 0.65);
             z-index: 500;
             opacity: 0;
@@ -586,8 +602,6 @@
             transition: opacity .3s;
             -webkit-backdrop-filter: blur(4px);
             backdrop-filter: blur(4px);
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
         }
 
         .overlay.open {
@@ -1103,14 +1117,15 @@
 
         .cart-overlay {
             position: fixed;
-            inset: 0;
+            top: -60px;
+            left: -60px;
+            right: -60px;
+            bottom: -60px;
             background: rgba(0, 0, 0, 0.7);
             opacity: 0;
             transition: opacity .3s;
             -webkit-backdrop-filter: blur(4px);
             backdrop-filter: blur(4px);
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
         }
 
         .cart-sheet {
@@ -1120,11 +1135,12 @@
             padding: 0 0 calc(env(safe-area-inset-bottom) + 20px);
             -webkit-transform: translateY(100%);
             transform: translateY(100%);
-            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1);
+            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1), visibility 0s .4s;
             max-height: 90dvh;
             display: flex;
             flex-direction: column;
             box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.4);
+            visibility: hidden;
         }
 
         .cart-drawer.open .cart-overlay {
@@ -1136,6 +1152,8 @@
             -webkit-transform: translateY(0);
             transform: translateY(0);
             pointer-events: all;
+            visibility: visible;
+            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1), visibility 0s 0s;
         }
 
         .cart-header {
