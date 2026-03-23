@@ -73,7 +73,7 @@
         }
 
         /* ═══ NOTCH COVER ═════════════════════════════════════════════════ */
-        body::before {
+        #notchCover {
             content: '';
             position: fixed;
             top: 0;
@@ -1106,13 +1106,15 @@
             position: fixed;
             inset: 0;
             z-index: 700;
-            display: flex;
+            display: none;
             flex-direction: column;
             justify-content: flex-end;
-            pointer-events: none;
-            overflow: hidden;
             -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
+        }
+
+        .cart-drawer.open {
+            display: flex;
         }
 
         .cart-overlay {
@@ -1122,10 +1124,17 @@
             right: -60px;
             bottom: -60px;
             background: rgba(0, 0, 0, 0.7);
+            z-index: 699;
             opacity: 0;
+            pointer-events: none;
             transition: opacity .3s;
             -webkit-backdrop-filter: blur(4px);
             backdrop-filter: blur(4px);
+        }
+
+        .cart-overlay.open {
+            opacity: 1;
+            pointer-events: all;
         }
 
         .cart-sheet {
@@ -1135,25 +1144,17 @@
             padding: 0 0 calc(env(safe-area-inset-bottom) + 20px);
             -webkit-transform: translateY(100%);
             transform: translateY(100%);
-            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1), visibility 0s .4s;
+            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1);
             max-height: 90dvh;
             display: flex;
             flex-direction: column;
             box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.4);
-            visibility: hidden;
         }
 
-        .cart-drawer.open .cart-overlay {
-            opacity: 1;
-            pointer-events: all;
-        }
 
         .cart-drawer.open .cart-sheet {
             -webkit-transform: translateY(0);
             transform: translateY(0);
-            pointer-events: all;
-            visibility: visible;
-            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1), visibility 0s 0s;
         }
 
         .cart-header {
@@ -1595,6 +1596,9 @@
 
 <body>
 
+    <!-- ═══ NOTCH COVER (real div for Safari) ═════════════════════════ -->
+    <div id="notchCover"></div>
+
     <!-- ═══ HEADER ════════════════════════════════════════════════════ -->
     <header class="header" id="mainHeader">
         <div class="header-brand" id="headerBrand">
@@ -1720,9 +1724,11 @@
         </div>
     </div>
 
+    <!-- ═══ CART OVERLAY (outside drawer for Safari) ════════════════ -->
+    <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
     <!-- ═══ CART DRAWER ════════════════════════════════════════════════ -->
     <div class="cart-drawer" id="cartDrawer">
-        <div class="cart-overlay" onclick="closeCart()"></div>
         <div class="cart-sheet">
             <div class="cart-header">
                 <div class="cart-header-row">
@@ -2402,14 +2408,37 @@
         }
 
         function openCart() {
-            document.getElementById('cartDrawer').classList.add('open');
+            const drawer = document.getElementById('cartDrawer');
+            const overlay = document.getElementById('cartOverlay');
+            const notch = document.getElementById('notchCover');
+            drawer.classList.add('open');
+            overlay.classList.add('open');
+            notch.style.display = 'none';
             document.body.style.overflow = 'hidden';
+            // Trigger animation on next frame
+            requestAnimationFrame(() => {
+                drawer.querySelector('.cart-sheet').style.transform = 'translateY(0)';
+                drawer.querySelector('.cart-sheet').style.webkitTransform = 'translateY(0)';
+            });
         }
 
         function closeCart() {
-            document.getElementById('cartDrawer').classList.remove('open');
+            const drawer = document.getElementById('cartDrawer');
+            const overlay = document.getElementById('cartOverlay');
+            const notch = document.getElementById('notchCover');
+            const sheet = drawer.querySelector('.cart-sheet');
+            sheet.style.transform = '';
+            sheet.style.webkitTransform = '';
+            overlay.classList.remove('open');
+            notch.style.display = '';
             document.body.style.overflow = '';
             resetOrderSendPanel();
+            // Hide drawer after animation
+            setTimeout(() => {
+                if (!drawer.classList.contains('open')) return;
+                drawer.classList.remove('open');
+            }, 400);
+            drawer.classList.remove('open');
         }
 
         function chooseOrderMode(mode) {
