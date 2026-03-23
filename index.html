@@ -74,13 +74,14 @@
 
         /* ═══ NOTCH COVER ═════════════════════════════════════════════════ */
         #notchCover {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             height: env(safe-area-inset-top, 0px);
             background: var(--hero-nav);
-            z-index: 9000;
+            z-index: 199;
             pointer-events: none;
         }
 
@@ -103,19 +104,14 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            position: fixed;
+            position: -webkit-sticky;
+            position: sticky;
             top: 0;
-            left: 0;
-            right: 0;
-            z-index: 9100;
+            z-index: 200;
             border-bottom: none;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
             -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
-        }
-
-        #headerSpacer {
-            flex-shrink: 0;
         }
 
         .header-brand {
@@ -215,8 +211,9 @@
             align-items: center;
             position: -webkit-sticky;
             position: sticky;
-            top: 0; /* corrected by JS in setupNavTop */
-            z-index: 9090;
+            top: 0;
+            z-index: 190;
+            /* top set by JS after header measures */
             border-bottom: none;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
             scrollbar-width: none;
@@ -594,17 +591,17 @@
         /* ═══ MODAL OVERLAY ═══════════════════════════════════════════════ */
         .overlay {
             position: fixed;
-            top: -100px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9940;
+            top: -60px;
+            left: -60px;
+            right: -60px;
+            bottom: -60px;
+            background: rgba(0, 0, 0, 0.65);
+            z-index: 500;
             opacity: 0;
             pointer-events: none;
-            transition: opacity .25s;
-            -webkit-backdrop-filter: blur(3px);
-            backdrop-filter: blur(3px);
+            transition: opacity .3s;
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
         }
 
         .overlay.open {
@@ -624,7 +621,7 @@
             padding: 0;
             -webkit-transform: translate3d(0, 100vh, 0);
             transform: translate3d(0, 100vh, 0);
-            transition: -webkit-transform .26s cubic-bezier(.4, 0, .2, 1), transform .26s cubic-bezier(.4, 0, .2, 1);
+            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1);
             max-height: 92dvh;
             display: flex;
             flex-direction: column;
@@ -1109,10 +1106,12 @@
         .cart-drawer {
             position: fixed;
             inset: 0;
-            z-index: 9960;
+            z-index: 700;
             display: none;
             flex-direction: column;
             justify-content: flex-end;
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
         }
 
         .cart-drawer.open {
@@ -1121,17 +1120,17 @@
 
         .cart-overlay {
             position: fixed;
-            top: -100px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            background: rgba(0, 0, 0, 0.75);
-            z-index: 9950;
+            top: calc(-1 * env(safe-area-inset-top, 0px) - 10px);
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 699;
             opacity: 0;
             pointer-events: none;
-            transition: opacity .25s;
-            -webkit-backdrop-filter: blur(3px);
-            backdrop-filter: blur(3px);
+            transition: opacity .3s;
+            -webkit-backdrop-filter: blur(4px);
+            backdrop-filter: blur(4px);
         }
 
         .cart-overlay.open {
@@ -1146,14 +1145,12 @@
             padding: 0 0 calc(env(safe-area-inset-bottom) + 20px);
             -webkit-transform: translate3d(0, 100vh, 0);
             transform: translate3d(0, 100vh, 0);
-            transition: -webkit-transform .3s cubic-bezier(0, 0, 0.2, 1), transform .3s cubic-bezier(0, 0, 0.2, 1);
+            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1);
             max-height: 90dvh;
             display: flex;
             flex-direction: column;
             box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.4);
             will-change: transform;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
         }
 
 
@@ -1628,9 +1625,6 @@
         </button>
     </header>
 
-    <!-- spacer pushes everything below the fixed header -->
-    <div id="headerSpacer"></div>
-
     <!-- ═══ CATEGORY NAV ══════════════════════════════════════════════ -->
     <nav class="cat-nav" id="catNav" style="display:none">
         <div class="cat-nav-inner" id="catNavInner"></div>
@@ -1736,8 +1730,8 @@
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
     <!-- ═══ CART DRAWER ════════════════════════════════════════════════ -->
-    <div class="cart-drawer" id="cartDrawer" onclick="closeCart()">
-        <div class="cart-sheet" onclick="event.stopPropagation()">
+    <div class="cart-drawer" id="cartDrawer">
+        <div class="cart-sheet">
             <div class="cart-header">
                 <div class="cart-header-row">
                     <div class="cart-title">Mi Pedido 🛒</div>
@@ -2128,11 +2122,8 @@
         function setupNavTop() {
             const header = document.getElementById('mainHeader');
             const nav = document.getElementById('catNav');
-            const spacer = document.getElementById('headerSpacer');
             function setTop() {
-                const h = header.offsetHeight;
-                nav.style.top = h + 'px';
-                if (spacer) spacer.style.height = h + 'px';
+                nav.style.top = header.offsetHeight + 'px';
             }
             setTop();
             new ResizeObserver(setTop).observe(header);
@@ -2437,7 +2428,7 @@
             document.body.style.overflow = '';
             resetOrderSendPanel();
             // Wait for slide-out animation then hide drawer
-            setTimeout(() => { drawer.classList.remove('open'); }, 310);
+            setTimeout(() => { drawer.classList.remove('open'); }, 400);
         }
 
         function chooseOrderMode(mode) {
