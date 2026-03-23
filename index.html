@@ -74,14 +74,13 @@
 
         /* ═══ NOTCH COVER ═════════════════════════════════════════════════ */
         #notchCover {
-            content: '';
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             height: env(safe-area-inset-top, 0px);
             background: var(--hero-nav);
-            z-index: 199;
+            z-index: 9000;
             pointer-events: none;
         }
 
@@ -621,7 +620,7 @@
             padding: 0;
             -webkit-transform: translate3d(0, 100vh, 0);
             transform: translate3d(0, 100vh, 0);
-            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1);
+            transition: -webkit-transform .26s cubic-bezier(.4, 0, .2, 1), transform .26s cubic-bezier(.4, 0, .2, 1);
             max-height: 92dvh;
             display: flex;
             flex-direction: column;
@@ -1120,17 +1119,17 @@
 
         .cart-overlay {
             position: fixed;
-            top: calc(-1 * env(safe-area-inset-top, 0px) - 10px);
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
+            top: -100px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
             background: rgba(0, 0, 0, 0.7);
             z-index: 699;
             opacity: 0;
             pointer-events: none;
-            transition: opacity .3s;
-            -webkit-backdrop-filter: blur(4px);
-            backdrop-filter: blur(4px);
+            transition: opacity .25s;
+            -webkit-backdrop-filter: blur(3px);
+            backdrop-filter: blur(3px);
         }
 
         .cart-overlay.open {
@@ -1145,7 +1144,7 @@
             padding: 0 0 calc(env(safe-area-inset-bottom) + 20px);
             -webkit-transform: translate3d(0, 100vh, 0);
             transform: translate3d(0, 100vh, 0);
-            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1);
+            transition: -webkit-transform .26s cubic-bezier(.4, 0, .2, 1), transform .26s cubic-bezier(.4, 0, .2, 1);
             max-height: 90dvh;
             display: flex;
             flex-direction: column;
@@ -1730,8 +1729,8 @@
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
     <!-- ═══ CART DRAWER ════════════════════════════════════════════════ -->
-    <div class="cart-drawer" id="cartDrawer">
-        <div class="cart-sheet">
+    <div class="cart-drawer" id="cartDrawer" onclick="closeCart()">
+        <div class="cart-sheet" onclick="event.stopPropagation()">
             <div class="cart-header">
                 <div class="cart-header-row">
                     <div class="cart-title">Mi Pedido 🛒</div>
@@ -2428,7 +2427,7 @@
             document.body.style.overflow = '';
             resetOrderSendPanel();
             // Wait for slide-out animation then hide drawer
-            setTimeout(() => { drawer.classList.remove('open'); }, 400);
+            setTimeout(() => { drawer.classList.remove('open'); }, 280);
         }
 
         function chooseOrderMode(mode) {
