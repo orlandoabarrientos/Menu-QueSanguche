@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Que Sanguche — Menú Digital</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -29,7 +30,7 @@
             --muted: #7A8887;
             --border: rgba(255, 255, 255, 0.07);
             --shadow-card: 0 2px 12px rgba(0, 0, 0, 0.09);
-            --font-display: 'Biker From Hell', cursive;
+            --font-display: 'Biker From Hell', 'Inter', sans-serif;
             --font-base: 'Inter', sans-serif;
         }
 
@@ -45,6 +46,21 @@
         html {
             scroll-behavior: smooth;
             -webkit-tap-highlight-color: transparent
+        }
+
+        button,
+        input,
+        textarea,
+        select,
+        .product-row,
+        .cat-pill,
+        .size-opt,
+        .guarn-chip,
+        .qty-btn,
+        .btn-add,
+        .btn-wa,
+        .cart-btn {
+            touch-action: manipulation;
         }
 
         body {
@@ -71,7 +87,7 @@
         /* ═══ HEADER ══════════════════════════════════════════════════════ */
         .header {
             background: var(--hero-nav);
-            padding: 14px 20px;
+            padding: calc(env(safe-area-inset-top) + 14px) 20px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -299,6 +315,14 @@
             border-radius: 99px;
             transform: translateX(-6%) rotate(-28deg);
             pointer-events: none;
+        }
+
+        .biker-fallback {
+            font-family: var(--font-base);
+            font-weight: 700;
+            font-size: 0.95em;
+            line-height: 1;
+            vertical-align: baseline;
         }
 
         .hero-sub {
@@ -1335,7 +1359,7 @@
             padding: 10px 12px;
             font-family: var(--font-base);
             font-weight: 600;
-            font-size: 13px;
+            font-size: 16px;
             color: var(--dark);
             background: var(--white);
             outline: none;
@@ -1895,15 +1919,23 @@
                 .map(([n, c]) => c === 2 ? `Doble ración de ${n}` : n);
         }
 
-        function withBikerAccents(text) {
-            const map = {
+        function withBikerSpecials(text) {
+            const accentMap = {
                 'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u',
                 'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U'
             };
-            return String(text).replace(/[áéíóúÁÉÍÓÚ]/g, (ch) => {
-                const base = map[ch] || ch;
-                return `<span class="biker-accent" data-mark="´">${base}</span>`;
-            });
+            const fallbackChars = new Set(['ñ', 'Ñ', 'ü', 'Ü', 'ç', 'Ç', '$']);
+            let out = '';
+            for (const ch of String(text)) {
+                if (accentMap[ch]) {
+                    out += `<span class="biker-accent">${accentMap[ch]}</span>`;
+                } else if (fallbackChars.has(ch)) {
+                    out += `<span class="biker-fallback">${ch}</span>`;
+                } else {
+                    out += ch;
+                }
+            }
+            return out;
         }
 
         /* ── RENDER MENU ────────────────────────────────────────────────── */
@@ -1934,7 +1966,7 @@
       <div class="cat-header">
         <div class="cat-header-emoji">${cat.emoji}</div>
         <div class="cat-header-text">
-                    <div class="cat-header-name">${withBikerAccents(cat.name)}</div>
+                      <div class="cat-header-name">${withBikerSpecials(cat.name)}</div>
           <div class="cat-header-sub">${cat.sub}</div>
         </div>
       </div>
@@ -2073,7 +2105,7 @@
 
             document.getElementById('mEmoji').textContent = p.emoji;
             document.getElementById('mCat').textContent = cat.name;
-            document.getElementById('mName').innerHTML = withBikerAccents(p.name);
+            document.getElementById('mName').innerHTML = withBikerSpecials(p.name);
             document.getElementById('mDesc').textContent = p.desc;
             document.getElementById('qtyVal').textContent = '1';
             hideError();
