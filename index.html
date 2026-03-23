@@ -80,7 +80,7 @@
             right: 0;
             height: env(safe-area-inset-top, 0px);
             background: var(--hero-nav);
-            z-index: 9999;
+            z-index: 9000;
             pointer-events: none;
         }
 
@@ -109,8 +109,7 @@
             z-index: 200;
             border-bottom: none;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
+            /* Removed translate3d: breaks iOS Safari sticky positioning! */
         }
 
         .header-brand {
@@ -217,8 +216,7 @@
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
             scrollbar-width: none;
             -ms-overflow-style: none;
-            -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
+            /* Removed translate3d: breaks iOS Safari sticky positioning! */
         }
 
         .cat-nav::-webkit-scrollbar {
@@ -590,12 +588,12 @@
         /* ═══ MODAL OVERLAY ═══════════════════════════════════════════════ */
         .overlay {
             position: fixed;
-            top: -60px;
-            left: -60px;
-            right: -60px;
-            bottom: -60px;
+            top: -100px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
             background: rgba(0, 0, 0, 0.65);
-            z-index: 500;
+            z-index: 9940;
             opacity: 0;
             pointer-events: none;
             transition: opacity .3s;
@@ -1105,12 +1103,13 @@
         .cart-drawer {
             position: fixed;
             inset: 0;
-            z-index: 700;
+            z-index: 9960;
             display: none;
             flex-direction: column;
             justify-content: flex-end;
             -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
+            cursor: pointer;
         }
 
         .cart-drawer.open {
@@ -1119,12 +1118,12 @@
 
         .cart-overlay {
             position: fixed;
-            top: calc(-1 * env(safe-area-inset-top, 0px) - 10px);
-            left: -10px;
-            right: -10px;
-            bottom: -10px;
+            top: -100px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
             background: rgba(0, 0, 0, 0.7);
-            z-index: 699;
+            z-index: 9950;
             opacity: 0;
             pointer-events: none;
             transition: opacity .3s;
@@ -1729,8 +1728,8 @@
     <div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
 
     <!-- ═══ CART DRAWER ════════════════════════════════════════════════ -->
-    <div class="cart-drawer" id="cartDrawer">
-        <div class="cart-sheet">
+    <div class="cart-drawer" id="cartDrawer" onclick="closeCart()">
+        <div class="cart-sheet" onclick="event.stopPropagation()">
             <div class="cart-header">
                 <div class="cart-header-row">
                     <div class="cart-title">Mi Pedido 🛒</div>
