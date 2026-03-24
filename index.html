@@ -43,6 +43,13 @@
             padding: 0
         }
 
+        /*
+         * FIX SAFARI NOTCH (ARRIBA):
+         * El color de `html` es lo que Safari usa para pintar las zonas de
+         * safe-area cuando ningún elemento las cubre todavía.
+         * Al igualarlo al color del header/nav, el notch y las esquinas
+         * laterales del Dynamic Island se ven del mismo azul-teal.
+         */
         html {
             -webkit-tap-highlight-color: transparent;
             background: var(--hero-nav);
@@ -72,15 +79,27 @@
             min-height: 100dvh;
         }
 
-        /* ═══ NOTCH / SAFE-AREA COVER (SafeAreaView equivalent) ═══════════ */
+        /*
+         * FIX SAFARI NOTCH — #notchCover:
+         * En Safari iOS, `height: env(safe-area-inset-top)` sobre un elemento
+         * position:fixed a veces no se recalcula bien (el valor queda en 0 o
+         * se ignora). La solución robusta es:
+         *   - height: 0  →  el elemento no ocupa espacio por sí solo
+         *   - padding-top: env(safe-area-inset-top, 0px)  →  fuerza el alto
+         *     con el valor real de la safe-area
+         * El fallback "0px" es obligatorio en Safari más antiguo; sin él toda
+         * la expresión env() puede quedar inválida.
+         * z-index: 10000 garantiza que tape cualquier sticky/fixed interno.
+         */
         #notchCover {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            height: env(safe-area-inset-top, 0px);
+            height: 0;
+            padding-top: env(safe-area-inset-top, 0px);
             background: var(--hero-nav);
-            z-index: 9000;
+            z-index: 10000;
             pointer-events: none;
         }
 
@@ -96,10 +115,13 @@
             mix-blend-mode: multiply;
         }
 
-        /* ═══ HEADER ══════════════════════════════════════════════════════ */
+        /* ═══ HEADER ══════════════════════════════════════════════════════
+         * FIX: padding-top incluye la safe-area + 14px de diseño.
+         * El fallback "0px" es necesario para Safari < 11.2.
+         */
         .header {
             background: var(--hero-nav);
-            padding: calc(env(safe-area-inset-top) + 14px) 20px 14px;
+            padding: calc(env(safe-area-inset-top, 0px) + 14px) 20px 14px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -109,7 +131,6 @@
             z-index: 200;
             border-bottom: none;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
-            /* Removed translate3d: breaks iOS Safari sticky positioning! */
         }
 
         .header-brand {
@@ -211,12 +232,10 @@
             position: sticky;
             top: 0;
             z-index: 190;
-            /* top set by JS after header measures */
             border-bottom: none;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
             scrollbar-width: none;
             -ms-overflow-style: none;
-            /* Removed translate3d: breaks iOS Safari sticky positioning! */
         }
 
         .cat-nav::-webkit-scrollbar {
@@ -1038,10 +1057,16 @@
             flex-shrink: 0;
         }
 
-        /* Modal add bar */
+        /*
+         * FIX SAFARI BOTTOM (modal "Agregar al pedido"):
+         * La barra inferior del modal debe empujar su contenido por encima
+         * de la home bar / barra URL de Safari.
+         * Usamos env(safe-area-inset-bottom, 0px) — el fallback "0px" es
+         * obligatorio para que calc() sea válido en Safari < 11.2.
+         */
         .modal-add-bar {
             position: relative;
-            padding: 12px 24px calc(12px + env(safe-area-inset-bottom));
+            padding: 12px 24px calc(12px + env(safe-area-inset-bottom, 0px));
             background: var(--white);
             border-top: 1px solid var(--cream-dk);
             display: flex;
@@ -1050,7 +1075,8 @@
             flex-shrink: 0;
         }
 
-        /* Safari: remove safe-area padding when keyboard is open */
+        /* Cuando el teclado está abierto, quitamos la safe-area
+           porque el viewport ya quedó por encima de la barra */
         body:has(input:focus) .modal-add-bar,
         body:has(textarea:focus) .modal-add-bar {
             padding-bottom: 12px;
@@ -1136,11 +1162,18 @@
             pointer-events: all;
         }
 
+        /*
+         * FIX SAFARI BOTTOM (cart sheet):
+         * Eliminamos el padding-bottom del propio sheet (era
+         * "calc(max(...) + 20px)") porque ese max() con env() es problemático
+         * en Safari antiguo. El padding real ahora vive en .cart-footer,
+         * que es donde el usuario realmente ve el borde inferior.
+         */
         .cart-sheet {
             position: relative;
             background: var(--white);
             border-radius: 24px 24px 0 0;
-            padding: 0 0 calc(max(env(safe-area-inset-bottom, 0px), 20px) + 20px);
+            padding: 0;
             -webkit-transform: translate3d(0, 100vh, 0);
             transform: translate3d(0, 100vh, 0);
             transition: -webkit-transform .32s cubic-bezier(0, 0, 0.2, 1), transform .32s cubic-bezier(0, 0, 0.2, 1);
@@ -1150,7 +1183,6 @@
             box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.4);
             will-change: transform;
         }
-
 
         .cart-drawer.open .cart-sheet {
             -webkit-transform: translate3d(0, 0, 0);
@@ -1291,8 +1323,14 @@
             line-height: 1;
         }
 
+        /*
+         * FIX SAFARI BOTTOM (cart footer):
+         * El padding-bottom suma la safe-area inferior para que el botón
+         * de WhatsApp no quede oculto bajo la barra home/URL de Safari.
+         * Fallback "0px" es obligatorio.
+         */
         .cart-footer {
-            padding: 16px 24px;
+            padding: 16px 24px calc(20px + env(safe-area-inset-bottom, 0px));
             border-top: 1px solid var(--cream-dk);
         }
 
@@ -1428,11 +1466,14 @@
             display: none;
         }
 
-        /* ═══ FOOTER ══════════════════════════════════════════════════════ */
+        /* ═══ FOOTER ══════════════════════════════════════════════════════
+         * FIX: Al llegar al final del scroll el footer también respeta la
+         * safe-area inferior para que el copyright no quede bajo la home bar.
+         */
         .footer {
             background: var(--dark);
             text-align: center;
-            padding: 36px 24px 32px;
+            padding: 36px 24px calc(32px + env(safe-area-inset-bottom, 0px));
             border-top: 3px solid var(--teal-bg);
         }
 
@@ -1962,13 +2003,11 @@
         let cart = [];
         let currentProduct = null;
         let currentSize = null;
-        let currentGuarnMap = {}; // { name: count } where count is 1 or 2
+        let currentGuarnMap = {};
         let currentQty = 1;
         let currentOrderMode = null;
 
-        // Helper: total slots used
         function guarnTotal() { return Object.values(currentGuarnMap).reduce((s, v) => s + v, 0); }
-        // Helper: guarniciones as display array e.g. ['Papas fritas','Doble ración de Ensalada']
         function guarnDisplay() {
             return Object.entries(currentGuarnMap)
                 .filter(([, c]) => c > 0)
@@ -2001,19 +2040,16 @@
             const nav = document.getElementById('catNav');
             const main = document.getElementById('main');
 
-            // Move the nav to be the first child of main (right after hero, before menuRoot)
             main.insertBefore(nav, root);
             nav.style.display = '';
 
             MENU.forEach(cat => {
-                // Nav pill
                 const pill = document.createElement('button');
                 pill.className = 'cat-pill';
                 pill.textContent = cat.emoji + ' ' + cat.name;
                 pill.onclick = () => scrollToSection(cat.id);
                 navInner.appendChild(pill);
 
-                // Section
                 const sec = document.createElement('section');
                 sec.className = 'cat-section';
                 sec.id = 'cat-' + cat.id;
@@ -2082,13 +2118,11 @@
             const navH = document.getElementById('catNav').offsetHeight;
             const top = el.getBoundingClientRect().top + window.scrollY - headerH - navH - 2;
 
-            // Immediately highlight the clicked pill
             const pills = document.querySelectorAll('.cat-pill');
             pills.forEach(p => p.classList.remove('active'));
             const idx = MENU.findIndex(c => c.id === id);
             if (idx >= 0) pills[idx].classList.add('active');
 
-            // Lock spy so scroll animation doesn't override
             spyLocked = true;
             clearTimeout(spyLockTimer);
             spyLockTimer = setTimeout(() => { spyLocked = false; }, 900);
@@ -2104,7 +2138,6 @@
             window.visualViewport.addEventListener('resize', () => {
                 const offset = window.innerHeight - window.visualViewport.height;
                 if (offset > 50) {
-                    // Keyboard is open
                     cartSheet.style.paddingBottom = '20px';
                     modalEl.style.paddingBottom = '0px';
                 } else {
@@ -2150,7 +2183,7 @@
             const topOffset = headerH + navH;
 
             const io = new IntersectionObserver(entries => {
-                if (spyLocked) return; // don't override manual pill click during scroll
+                if (spyLocked) return;
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const idx = sections.indexOf(entry.target);
@@ -2184,7 +2217,6 @@
             document.getElementById('qtyVal').textContent = '1';
             hideError();
 
-            // Sizes
             const sizeSection = document.getElementById('sizeSection');
             const sizeRow = document.getElementById('sizeRow');
             if (p.sizes && p.sizes.length > 1) {
@@ -2213,7 +2245,6 @@
                 currentSize = p.sizes ? p.sizes[0] : { p: p.price };
             }
 
-            // Guarniciones
             const guarnSection = document.getElementById('guarnSection');
             const guarnGrid = document.getElementById('guarnGrid');
             const guarnCounter = document.getElementById('guarnCounter');
@@ -2261,7 +2292,6 @@
             const badge = chip.querySelector('.gc-badge');
 
             if (cur === 0) {
-                // → 1: select once (need 1 free slot)
                 if (total >= max) return;
                 currentGuarnMap[name] = 1;
                 chip.classList.add('sel');
@@ -2269,9 +2299,7 @@
                 check.style.display = 'flex';
                 badge.style.display = 'none';
             } else if (cur === 1) {
-                // → 2: double (need 1 more free slot)
                 if (total >= max) {
-                    // no free slot → deselect instead
                     currentGuarnMap[name] = 0;
                     chip.classList.remove('sel', 'double');
                     check.style.display = 'none';
@@ -2283,7 +2311,6 @@
                     badge.style.display = 'flex';
                 }
             } else {
-                // cur === 2 → 0: deselect
                 currentGuarnMap[name] = 0;
                 chip.classList.remove('sel', 'double');
                 check.style.display = 'none';
@@ -2294,7 +2321,6 @@
             counter.textContent = `${newTotal} / ${max}`;
             counter.classList.toggle('done', newTotal === max);
 
-            // Lock chips that can't take more (but allow clicking already-selected ones to cycle)
             document.querySelectorAll('.guarn-chip').forEach(c => {
                 const cname = c.querySelector('.gc-name').textContent;
                 const cCount = currentGuarnMap[cname] || 0;
@@ -2323,12 +2349,10 @@
 
         function addToCart() {
             const p = currentProduct;
-            // Validate size
             if (p.sizes && p.sizes.length > 1 && !currentSize) {
                 showError('Por favor elegí un tamaño (M o XXL).');
                 return;
             }
-            // Validate guarniciones
             const total = guarnTotal();
             if (p.guarn > 0 && total < p.guarn) {
                 showError(`Faltan ${p.guarn - total} guarnición(es). Elegí ${p.guarn} en total.`);
@@ -2349,7 +2373,6 @@
             updateCartUI();
             closeModal();
 
-            // Pop animation on cart button
             const btn = document.querySelector('.cart-btn');
             btn.classList.remove('pop');
             void btn.offsetWidth;
@@ -2421,7 +2444,6 @@
             overlay.classList.remove('open');
             document.body.style.overflow = '';
             resetOrderSendPanel();
-            // Wait for slide-out animation then hide drawer
             setTimeout(() => { drawer.classList.remove('open'); }, 340);
         }
 
