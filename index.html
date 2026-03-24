@@ -15,15 +15,15 @@
         :root {
             --cream: #F0E9D6;
             --cream-dk: #E2D9C2;
-            --teal: #3BB5AF;
-            --teal-dk: #266B68;
+            --teal: #7CCBD1;
+            --teal-dk: #3A969B;
             --teal-bg: #1B4745;
             --hero-nav: #7CCBD1;
             --nav-btn: #F4FFF0;
             --dark: #131B1A;
             --dark2: #1E2B2A;
-            --gold: #FCFC0D;
-            --gold-dk: #FCFC0D;
+            --gold: #fcd414;
+            --gold-dk: #fcd414;
             --red: #C94136;
             --white: #F4FFF0;
             --text: #181F1E;
@@ -393,7 +393,7 @@
 
         .cat-header-name {
             font-family: var(--font-display);
-            font-size: clamp(16px, 4vw, 21px);
+            font-size: clamp(20px, 4.5vw, 26px);
             color: var(--white);
             line-height: 1.1;
             letter-spacing: 0.5px;
@@ -403,9 +403,9 @@
             font-size: 10px;
             font-weight: 600;
             font-family: var(--font-base);
-            letter-spacing: 1.5px;
+            letter-spacing: 0.5px;
             text-transform: uppercase;
-            color: var(--teal);
+            color: var(--hero-nav);
             margin-top: 4px;
             white-space: normal;
             line-height: 1.4;
@@ -553,7 +553,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 2px 2px 0 var(--teal-dk);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.14);
             transition: transform .2s;
             flex-shrink: 0;
         }
@@ -565,7 +565,7 @@
         .product-add-icon svg {
             width: 14px;
             height: 14px;
-            stroke: #fff;
+            stroke: var(--dark);
             fill: none;
             stroke-width: 2.5;
         }
@@ -743,7 +743,7 @@
         .size-opt.sel {
             background: #091b1f;
             border-color: #091b1f;
-            box-shadow: 3px 3px 0 var(--teal);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
             transform: translateY(-2px);
         }
 
@@ -808,7 +808,7 @@
         .sz-check svg {
             width: 9px;
             height: 9px;
-            stroke: #fff;
+            stroke: var(--dark);
             fill: none;
             stroke-width: 2.5;
         }
@@ -866,8 +866,8 @@
 
         .guarn-chip.sel {
             background: #091b1f;
-            border-color: var(--teal);
-            box-shadow: 2px 2px 0 var(--teal-dk);
+            border-color: #091b1f;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
             transform: translateY(-1px);
         }
 
@@ -932,7 +932,7 @@
         .guarn-chip .gc-check svg {
             width: 9px;
             height: 9px;
-            stroke: #fff;
+            stroke: var(--dark);
             fill: none;
             stroke-width: 2.5;
         }
