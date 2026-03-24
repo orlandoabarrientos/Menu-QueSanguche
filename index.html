@@ -593,7 +593,7 @@
             right: -20px;
             bottom: -20px;
             background: rgba(0, 0, 0, 0.65);
-            z-index: 9940;
+            z-index: 500;
             opacity: 0;
             pointer-events: none;
             transition: opacity .3s;
@@ -618,7 +618,7 @@
             padding: 0;
             -webkit-transform: translate3d(0, 100vh, 0);
             transform: translate3d(0, 100vh, 0);
-            transition: -webkit-transform .32s cubic-bezier(0, 0, 0.2, 1), transform .32s cubic-bezier(0, 0, 0.2, 1);
+            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1);
             max-height: 88svh;
             display: flex;
             flex-direction: column;
@@ -1143,7 +1143,7 @@
             padding: 0 0 calc(max(env(safe-area-inset-bottom, 0px), 20px) + 20px);
             -webkit-transform: translate3d(0, 100vh, 0);
             transform: translate3d(0, 100vh, 0);
-            transition: -webkit-transform .32s cubic-bezier(0, 0, 0.2, 1), transform .32s cubic-bezier(0, 0, 0.2, 1);
+            transition: -webkit-transform .4s cubic-bezier(.32, .72, 0, 1), transform .4s cubic-bezier(.32, .72, 0, 1);
             max-height: 88svh;
             display: flex;
             flex-direction: column;
@@ -2422,7 +2422,7 @@
             document.body.style.overflow = '';
             resetOrderSendPanel();
             // Wait for slide-out animation then hide drawer
-            setTimeout(() => { drawer.classList.remove('open'); }, 340);
+            setTimeout(() => { drawer.classList.remove('open'); }, 420);
         }
 
         function chooseOrderMode(mode) {
