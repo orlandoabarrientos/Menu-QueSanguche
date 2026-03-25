@@ -1825,8 +1825,8 @@
                 products: [
                     {
                         id: 'super-promo', name: 'Súper Promo', emoji: '⭐', category: 'Promos',
-                        desc: 'Milanesa clásica o cheddar con 1 guarnición a elección.',
-                        sizes: [{ l: 'M', s: '130g', p: 3.49 }, { l: 'XXL', s: '240g', p: 5.50 }], guarn: 1
+                        desc: 'Milanesa clásica o cheddar con papas fritas.',
+                        sizes: [{ l: 'M', s: '130g', p: 3.49 }, { l: 'XXL', s: '240g', p: 5.00 }], guarn: 1, allowedGuarns: ['Papas fritas']
                     },
                 ]
             },
@@ -1852,7 +1852,7 @@
                     {
                         id: 'cesar-c', name: 'Cesar Crispy', emoji: '🥗', category: 'Sánguches',
                         desc: 'Pollo, aderezo César, lechuga y queso amarillo.',
-                        sizes: [{ l: 'M', s: '', p: 2.00 }, { l: 'XXL', s: '', p: 4.46 }]
+                        sizes: [{ l: 'M', s: '', p: 2.30 }, { l: 'XXL', s: '', p: 4.46 }]
                     },
                     {
                         id: 'choripan', name: 'Choripán', emoji: '🌭', category: 'Sánguches',
@@ -1868,19 +1868,27 @@
             },
             {
                 id: 'plancha', name: 'A la Plancha', emoji: '🍳',
-                sub: 'Milanesa a la plancha · Pan artesanal',
+                sub: 'Sánguches o al plato',
                 products: [
                     {
-                        id: 'plancha-clasico', name: 'Clásico', emoji: '🍳', category: 'A la Plancha',
-                        desc: 'Pollo, vegetales, jamón y queso.', price: 4.96
+                        id: 'plancha-plato-1', name: 'Al Plato (1 Contorno)', emoji: '🍽️', category: 'A la Plancha',
+                        desc: 'Milanesa deshuesada a la plancha. Incluye 1 guarnición a elección.', price: 4.50, guarn: 1
                     },
                     {
-                        id: 'plancha-americano', name: 'Americano', emoji: '🍔', category: 'A la Plancha',
-                        desc: 'Pollo, queso amarillo cheddar y tocineta.', price: 4.96
+                        id: 'plancha-plato-2', name: 'Al Plato (2 Contornos)', emoji: '🍽️', category: 'A la Plancha',
+                        desc: 'Milanesa deshuesada a la plancha. Incluye 2 guarniciones a elección.', price: 5.50, guarn: 2
                     },
                     {
-                        id: 'plancha-cesar', name: 'Cesar', emoji: '🥗', category: 'A la Plancha',
-                        desc: 'Pollo, tocineta, queso amarillo, lechuga y aderezo césar.', price: 4.96
+                        id: 'plancha-clasico', name: 'Sánguche Clásico', emoji: '🥪', category: 'A la Plancha',
+                        desc: 'Pan artesanal, pollo a la plancha, vegetales, jamón y queso.', price: 4.96
+                    },
+                    {
+                        id: 'plancha-americano', name: 'Sánguche Americano', emoji: '🍔', category: 'A la Plancha',
+                        desc: 'Pan artesanal, pollo a la plancha, queso amarillo cheddar y tocineta.', price: 4.96
+                    },
+                    {
+                        id: 'plancha-cesar', name: 'Sánguche Cesar', emoji: '🥗', category: 'A la Plancha',
+                        desc: 'Pan artesanal, pollo a la plancha, tocineta, queso amarillo, lechuga y aderezo césar.', price: 4.96
                     },
                 ]
             },
@@ -1890,7 +1898,7 @@
                 products: [
                     {
                         id: 'cajita-clasica', name: 'Cajita Feliz Clásica', emoji: '🍗', category: 'Combos',
-                        desc: '10 nuggets de pollo y ración de fritas.', price: 12.50
+                        desc: '10 nuggets de pollo, ración de fritas y 3 Sanguches XXL.', price: 12.50
                     },
                     {
                         id: 'cajita-premium', name: 'Cajita Premium', emoji: '🏆', category: 'Combos',
@@ -1917,9 +1925,9 @@
                     { id: 'pasta', name: 'Pasta de la Casa', emoji: '🍝', category: 'Extras', price: 3.00, desc: 'Pasta de la casa.' },
                     { id: 'tequenos', name: 'Ración de Tequeños', emoji: '🧀', category: 'Extras', price: 3.00, desc: '4 unidades de tequeños.' },
                     { id: 'nuggets-rac', name: 'Ración de Nuggets', emoji: '🍗', category: 'Extras', price: 2.96, desc: 'Nuggets con papas.' },
-                    { id: 'mate-srv', name: 'Servicio de Mate', emoji: '🧉', category: 'Extras', price: 5.00, desc: 'Servicio de mate.' },
+                    { id: 'mate-srv', name: 'Servicio de Mate', emoji: '🧉', category: 'Extras', price: 5.00, desc: 'Servicio de mate 2L.' },
                     { id: 'terere-srv', name: 'Servicio de Tereré', emoji: '🧉', category: 'Extras', price: 5.00, desc: 'Servicio de tereré.' },
-                    { id: 'empanada-cl', name: 'Empanadas Clásicas', emoji: '🫔', category: 'Extras', price: 1.00, desc: 'Empanadas clásicas.' },
+                    // { id: 'empanada-cl', name: 'Empanadas Clásicas', emoji: '🫔', category: 'Extras', price: 1.00, desc: 'Empanadas clásicas.' },
                     { id: 'empanada-mes', name: 'Empanadas del Mes', emoji: '🫔', category: 'Extras', price: 1.50, desc: 'Preguntar variedad del mes.' },
                     { id: 'ensalada-ces', name: 'Ensalada César', emoji: '🥗', category: 'Extras', price: 3.00, desc: 'Ensalada césar.' },
                 ]
@@ -1928,7 +1936,7 @@
                 id: 'postres', name: 'Postres', emoji: '🍮',
                 sub: 'El dulce final perfecto',
                 products: [
-                    { id: 'alfajor', name: 'Alfajor', emoji: '🍪', category: 'Postres', price: 1.60, desc: '2x1 — doble placer.' },
+                    { id: 'alfajor', name: 'Alfajor', emoji: '🍪', category: 'Postres', price: 1.90, desc: '2x1 — doble placer.' },
                     { id: 'flan', name: 'Flan', emoji: '🍮', category: 'Postres', price: 3.50, desc: 'Con crema y dulce de leche.' },
                     { id: 'chocotorta', name: 'Chocotorta', emoji: '🎂', category: 'Postres', price: 3.50, desc: 'Clásico postre argentino.' },
                 ]
@@ -1948,11 +1956,10 @@
                     { id: 'yukery', name: 'Jugo Yukery', emoji: '🧃', category: 'Bebidas', price: 1.50, desc: 'Jugo Yukery.' },
                     { id: 'jn-250-dur', name: 'Jugo Natural 250ml Durazno', emoji: '🍑', category: 'Bebidas', price: 1.00, desc: 'Jugo natural de durazno 250ml.' },
                     { id: 'jn-250-nar', name: 'Jugo Natural 250ml Naranja', emoji: '🍊', category: 'Bebidas', price: 1.00, desc: 'Jugo natural de naranja 250ml.' },
-                    { id: 'jn-500-dur', name: 'Jugo Natural 500ml Durazno', emoji: '🍑', category: 'Bebidas', price: 1.80, desc: 'Jugo natural de durazno 500ml.' },
-                    { id: 'jn-500-nar', name: 'Jugo Natural 500ml Naranja', emoji: '🍊', category: 'Bebidas', price: 1.80, desc: 'Jugo natural de naranja 500ml.' },
-                    { id: 'soda', name: 'Soda', emoji: '💧', category: 'Bebidas', price: 1.20, desc: 'Soda.' },
-                    { id: 'agua', name: 'Agua', emoji: '💧', category: 'Bebidas', price: 1.20, desc: 'Agua.' },
-                    { id: 'mate-beb', name: 'Mate (2L)', emoji: '🧉', category: 'Bebidas', price: 5.00, desc: 'Servicio de mate con 2 litros de agua.' },
+                    //{ id: 'jn-500-dur', name: 'Jugo Natural 500ml Durazno', emoji: '🍑', category: 'Bebidas', price: 1.80, desc: 'Jugo natural de durazno 500ml.' },
+                    //{ id: 'jn-500-nar', name: 'Jugo Natural 500ml Naranja', emoji: '🍊', category: 'Bebidas', price: 1.80, desc: 'Jugo natural de naranja 500ml.' },
+                    //{ id: 'soda', name: 'Soda', emoji: '💧', category: 'Bebidas', price: 1.20, desc: 'Soda.' },
+                    { id: 'agua', name: 'Agua', emoji: '💧', category: 'Bebidas', price: 1.00, desc: 'Agua.' },
                 ]
             },
         ];
@@ -2220,7 +2227,8 @@
                 guarnGrid.innerHTML = '';
                 guarnCounter.textContent = `0 / ${p.guarn}`;
                 guarnCounter.classList.remove('done');
-                GUARNICIONES.forEach(g => {
+                const availableGuarns = p.allowedGuarns ? GUARNICIONES.filter(g => p.allowedGuarns.includes(g.name)) : GUARNICIONES;
+                availableGuarns.forEach(g => {
                     const chip = document.createElement('div');
                     chip.className = 'guarn-chip';
                     chip.innerHTML = `
