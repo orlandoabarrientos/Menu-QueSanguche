@@ -1695,7 +1695,7 @@
             <!-- GUARNICIONES -->
             <div id="guarnSection" style="display:none">
                 <div class="guarn-header">
-                    <div class="modal-label" style="margin-bottom:0">Guarniciones</div>
+                    <div class="modal-label" id="guarnLabel" style="margin-bottom:0">Guarniciones</div>
                     <div class="guarn-counter" id="guarnCounter">0 / 2</div>
                 </div>
                 <div class="guarn-grid" id="guarnGrid"></div>
@@ -1962,6 +1962,27 @@
                     { id: 'agua', name: 'Agua', emoji: '💧', category: 'Bebidas', price: 1.00, desc: 'Agua.' },
                 ]
             },
+            {
+                id: 'congelados', name: 'Congelados', emoji: '🧊',
+                sub: 'Productos congelados',
+                products: [
+                    { id: 'promo-mes-milanesa-kg', name: '1 Kg de Milanesa Empanizada', emoji: '🍗', category: 'Congelados', price: 6.90, desc: 'Promo del mes.' },
+                    { id: 'promo-mes-nuggets-3kg', name: '3 Kg de Nuggets de Pollo', emoji: '🍗', category: 'Congelados', price: 22.50, desc: 'Promo del mes.' },
+                    { id: 'promo-mes-combo-granjero', name: 'Combo Granjero', emoji: '📦', category: 'Congelados', price: 12.00, desc: '6 panes, 6 lonjas de jamón y queso, 6 milanesas, salsas y 1 refresco.' },
+                    { id: 'cong-milanesa-papas', name: '1 Milanesa + Papas', emoji: '🍟', category: 'Congelados', price: 1.50, desc: 'Producto congelado.' },
+                    { id: 'cong-hamburguesa-papas', name: '1 Carne de Hamburguesa + Papas', emoji: '🍔', category: 'Congelados', price: 1.50, desc: 'Producto congelado.' },
+                    { id: 'cong-medallon-pollo-papas', name: '1 Medallón de Pollo + Papas', emoji: '🍗', category: 'Congelados', price: 1.50, desc: 'Producto congelado.' },
+                    {
+                        id: 'cong-milanesa-rellena-papas', name: 'Milanesa Rellena + Papas', emoji: '🍗', category: 'Congelados',
+                        price: 2.99, desc: 'Elegí tu versión.', guarn: 1, guarnLabel: 'Versiones', guarnErrorLabel: 'versión(es)', guarnChooseText: 'Elegí 1 versión.', tagLabel: '2 versiones',
+                        customGuarns: [
+                            { name: 'Bandeja de MILANESA RELLENA DE MOZARELLA MAÍZ Y QUESO', icon: '🧀' },
+                            { name: 'Bandeja de MILANESA RELLENA DE MOZARELLA MAÍZ Y TOCINETA', icon: '🥓' },
+                        ]
+                    },
+                    { id: 'cong-4nuggets-papas', name: '4 Nuggets + Papas', emoji: '🍟', category: 'Congelados', price: 1.50, desc: 'Producto congelado.' },
+                ]
+            },
         ];
 
         /* ── CART STATE ─────────────────────────────────────────────────── */
@@ -2056,7 +2077,7 @@
 
             let tagsHtml = '';
             if (hasMulti) tagsHtml += `<span class="product-tag tag-sizes">M · XXL</span>`;
-            if (hasGuarn) tagsHtml += `<span class="product-tag tag-guarnicion">${p.guarn === 1 ? '1 guarnición' : '2 guarniciones'}</span>`;
+            if (hasGuarn) tagsHtml += `<span class="product-tag tag-guarnicion">${p.tagLabel || (p.guarn === 1 ? '1 guarnición' : '2 guarniciones')}</span>`;
 
             row.innerHTML = `
     <div class="product-emoji-wrap">${p.emoji}</div>
@@ -2223,11 +2244,13 @@
             const guarnSection = document.getElementById('guarnSection');
             const guarnGrid = document.getElementById('guarnGrid');
             const guarnCounter = document.getElementById('guarnCounter');
+            const guarnLabel = document.getElementById('guarnLabel');
             if (p.guarn > 0) {
                 guarnGrid.innerHTML = '';
+                guarnLabel.textContent = p.guarnLabel || 'Guarniciones';
                 guarnCounter.textContent = `0 / ${p.guarn}`;
                 guarnCounter.classList.remove('done');
-                const availableGuarns = p.allowedGuarns ? GUARNICIONES.filter(g => p.allowedGuarns.includes(g.name)) : GUARNICIONES;
+                const availableGuarns = p.customGuarns ? p.customGuarns : (p.allowedGuarns ? GUARNICIONES.filter(g => p.allowedGuarns.includes(g.name)) : GUARNICIONES);
                 availableGuarns.forEach(g => {
                     const chip = document.createElement('div');
                     chip.className = 'guarn-chip';
@@ -2338,7 +2361,10 @@
             // Validate guarniciones
             const total = guarnTotal();
             if (p.guarn > 0 && total < p.guarn) {
-                showError(`Faltan ${p.guarn - total} guarnición(es). Elegí ${p.guarn} en total.`);
+                const missing = p.guarn - total;
+                const missingLabel = p.guarnErrorLabel || 'guarnición(es)';
+                const chooseText = p.guarnChooseText || `Elegí ${p.guarn} en total.`;
+                showError(`Faltan ${missing} ${missingLabel}. ${chooseText}`);
                 return;
             }
 
@@ -2498,7 +2524,7 @@
             });
             msg += `*Total: $${total.toFixed(2)}*`;
             resetOrderSendPanel();
-            window.open(`https://wa.me/584245776680?text=${encodeURIComponent(msg)}`, '_blank');
+            window.open(`https://wa.me/584245026456?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
         /* ── INIT ───────────────────────────────────────────────────────── */
