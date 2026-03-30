@@ -6,6 +6,8 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Que Sanguche — Menú Digital</title>
+    <link rel="icon"
+        href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%87%A6%F0%9F%87%B7%3C/text%3E%3C/svg%3E" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -779,8 +781,21 @@
             transition: color .2s;
         }
 
+        .size-opt .sz-price-bs {
+            font-family: var(--font-base);
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+            transition: color .2s;
+        }
+
         .size-opt.sel .sz-price {
             color: var(--white);
+        }
+
+        .size-opt.sel .sz-price-bs {
+            color: rgba(255, 255, 255, 0.72);
         }
 
         .size-opt .sz-check {
@@ -1094,7 +1109,10 @@
             background: rgba(0, 0, 0, 0.15);
             padding: 4px 12px;
             border-radius: 8px;
-            font-size: 15px;
+            font-size: 13px;
+            white-space: pre-line;
+            text-align: right;
+            line-height: 1.15;
         }
 
         /* ═══ CART DRAWER ═════════════════════════════════════════════════ */
@@ -1302,6 +1320,13 @@
             margin-bottom: 14px;
         }
 
+        .cart-total-col {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 2px;
+        }
+
         .cart-total-label {
             font-family: var(--font-base);
             font-weight: 600;
@@ -1315,6 +1340,24 @@
             font-family: var(--font-display);
             font-size: 26px;
             color: var(--dark);
+        }
+
+        .cart-total-price-bs {
+            font-family: var(--font-base);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--muted);
+            letter-spacing: 0.4px;
+        }
+
+        .bcv-rate-label {
+            margin-top: -6px;
+            margin-bottom: 10px;
+            font-family: var(--font-base);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--muted);
+            letter-spacing: 0.3px;
         }
 
         .btn-wa {
@@ -1742,10 +1785,22 @@
             <div class="cart-footer">
                 <div class="cart-total-row">
                     <span class="cart-total-label">Total</span>
-                    <span class="cart-total-price" id="cartTotal">$0.00</span>
+                    <div class="cart-total-col">
+                        <span class="cart-total-price" id="cartTotal">$0.00</span>
+                        <span class="cart-total-price-bs" id="cartTotalBs">Bs --</span>
+                    </div>
                 </div>
+                <div class="bcv-rate-label" id="bcvRateLabel">Tasa BCV: cargando...</div>
                 <div class="order-send-panel hidden" id="orderSendPanel">
                     <div class="order-send-title">Como queres recibirlo?</div>
+                    <div class="order-location">
+                        <input class="order-location-input" id="orderNameInput" type="text"
+                            placeholder="Tu nombre (opcional)" />
+                    </div>
+                    <div class="order-location">
+                        <input class="order-location-input" id="orderPhoneInput" type="tel" inputmode="tel"
+                            placeholder="Tu numero de telefono (opcional)" />
+                    </div>
                     <div class="order-mode-row">
                         <button class="order-mode-btn" id="modePickupBtn"
                             onclick="chooseOrderMode('pickup')">Pickup</button>
@@ -1954,8 +2009,8 @@
                     { id: 'lipton-dur', name: 'Lipton Durazno', emoji: '🍑', category: 'Bebidas', price: 2.00, desc: 'Lipton de durazno.' },
                     { id: 'lipton-lim', name: 'Lipton Limón', emoji: '🍋', category: 'Bebidas', price: 2.00, desc: 'Lipton de limón.' },
                     { id: 'yukery', name: 'Jugo Yukery', emoji: '🧃', category: 'Bebidas', price: 1.50, desc: 'Jugo Yukery.' },
-                    { id: 'jn-250-dur', name: 'Jugo Natural 250ml Durazno', emoji: '🍑', category: 'Bebidas', price: 1.00, desc: 'Jugo natural de durazno 250ml.' },
-                    { id: 'jn-250-nar', name: 'Jugo Natural 250ml Naranja', emoji: '🍊', category: 'Bebidas', price: 1.00, desc: 'Jugo natural de naranja 250ml.' },
+                    //{ id: 'jn-250-dur', name: 'Jugo Natural 250ml Durazno', emoji: '🍑', category: 'Bebidas', price: 1.00, desc: 'Jugo natural de durazno 250ml.' },
+                    //{ id: 'jn-250-nar', name: 'Jugo Natural 250ml Naranja', emoji: '🍊', category: 'Bebidas', price: 1.00, desc: 'Jugo natural de naranja 250ml.' },
                     //{ id: 'jn-500-dur', name: 'Jugo Natural 500ml Durazno', emoji: '🍑', category: 'Bebidas', price: 1.80, desc: 'Jugo natural de durazno 500ml.' },
                     //{ id: 'jn-500-nar', name: 'Jugo Natural 500ml Naranja', emoji: '🍊', category: 'Bebidas', price: 1.80, desc: 'Jugo natural de naranja 500ml.' },
                     //{ id: 'soda', name: 'Soda', emoji: '💧', category: 'Bebidas', price: 1.20, desc: 'Soda.' },
@@ -1992,6 +2047,9 @@
         let currentGuarnMap = {}; // { name: count } where count is 1 or 2
         let currentQty = 1;
         let currentOrderMode = null;
+        let bcvRate = null;
+
+        const BCV_API_URLS = ['https://quesanguchee.com/api-bcv/rates'];
 
         // Helper: total slots used
         function guarnTotal() { return Object.values(currentGuarnMap).reduce((s, v) => s + v, 0); }
@@ -2019,6 +2077,86 @@
                 }
             }
             return out;
+        }
+
+        function extractBcvRate(data) {
+            const isValid = (n) => Number.isFinite(n) && n > 1 && n < 1000;
+            const keyScore = (k) => /rate|tasa|price|precio|promedio|valor|oficial/i.test(k || '');
+
+            function dive(node) {
+                if (typeof node === 'number') return isValid(node) ? node : null;
+                if (!node || typeof node !== 'object') return null;
+
+                if (Array.isArray(node)) {
+                    for (const item of node) {
+                        const found = dive(item);
+                        if (found) return found;
+                    }
+                    return null;
+                }
+
+                const keys = Object.keys(node);
+
+                for (const key of keys) {
+                    const val = node[key];
+                    if (typeof val === 'number' && keyScore(key) && isValid(val)) return val;
+                }
+
+                for (const key of keys) {
+                    if (/bcv|usd|dolar|dollar|oficial/i.test(key)) {
+                        const found = dive(node[key]);
+                        if (found) return found;
+                    }
+                }
+
+                for (const key of keys) {
+                    const found = dive(node[key]);
+                    if (found) return found;
+                }
+
+                return null;
+            }
+
+            return dive(data);
+        }
+
+        async function loadBcvRate() {
+            const rateEl = document.getElementById('bcvRateLabel');
+            for (const endpoint of BCV_API_URLS) {
+                try {
+                    const res = await fetch(endpoint, { cache: 'no-store' });
+                    if (!res.ok) continue;
+                    const data = await res.json();
+                    const raw = data?.rates?.usd;
+                    const directRate = typeof raw === 'number' ? raw : Number(raw);
+                    const rate = Number.isFinite(directRate) && directRate > 1 ? directRate : extractBcvRate(data);
+                    if (!rate) continue;
+                    bcvRate = rate;
+                    rateEl.textContent = `Tasa BCV: Bs ${bcvRate.toFixed(2)}`;
+                    updateCartUI();
+                    updateAddPrice();
+                    return;
+                } catch (_) {
+                }
+            }
+            bcvRate = null;
+            rateEl.textContent = 'Tasa BCV: no disponible';
+            updateCartUI();
+            updateAddPrice();
+        }
+
+        function usdToBs(usdAmount) {
+            if (!bcvRate) return null;
+            return usdAmount * bcvRate;
+        }
+
+        function formatUsd(usdAmount) {
+            return `$${usdAmount.toFixed(2)}`;
+        }
+
+        function formatBsFromUsd(usdAmount) {
+            const bsAmount = usdToBs(usdAmount);
+            return bsAmount === null ? 'Bs --' : `Bs ${bsAmount.toFixed(2)}`;
         }
 
         /* ── RENDER MENU ────────────────────────────────────────────────── */
@@ -2223,7 +2361,8 @@
         <div class="sz-check"><svg viewBox="0 0 12 10"><polyline points="1,5 4.5,9 11,1"/></svg></div>
         <div class="sz-letter">${s.l}</div>
         ${s.s ? `<div class="sz-sub">${s.s}</div>` : ''}
-        <div class="sz-price">$${s.p.toFixed(2)}</div>
+                <div class="sz-price">${formatUsd(s.p)}</div>
+                <div class="sz-price-bs">${formatBsFromUsd(s.p)}</div>
       `;
                     btn.onclick = () => {
                         document.querySelectorAll('.size-opt').forEach(b => b.classList.remove('sel'));
@@ -2335,7 +2474,7 @@
         }
 
         function changeQty(delta) {
-            currentQty = Math.max(1, Math.min(10, currentQty + delta));
+            currentQty = Math.max(1, Math.min(50, currentQty + delta));
             document.getElementById('qtyVal').textContent = currentQty;
             updateAddPrice();
         }
@@ -2348,7 +2487,7 @@
 
         function updateAddPrice() {
             const total = getBasePrice() * currentQty;
-            document.getElementById('btnAddPrice').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('btnAddPrice').textContent = `${formatUsd(total)}\n${formatBsFromUsd(total)}`;
         }
 
         function addToCart() {
@@ -2404,7 +2543,8 @@
             const countEl = document.getElementById('cartCount');
             countEl.textContent = count;
             countEl.classList.toggle('visible', count > 0);
-            document.getElementById('cartTotal').textContent = `$${total.toFixed(2)}`;
+            document.getElementById('cartTotal').textContent = formatUsd(total);
+            document.getElementById('cartTotalBs').textContent = formatBsFromUsd(total);
             document.getElementById('cartLabel').textContent = `${count} producto${count !== 1 ? 's' : ''}`;
             document.getElementById('orderSendPanel').classList.toggle('hidden', count === 0);
             if (count === 0) resetOrderSendPanel();
@@ -2460,12 +2600,21 @@
         function chooseOrderMode(mode) {
             currentOrderMode = mode;
             const isDelivery = mode === 'delivery';
+            const active = document.activeElement;
+            if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) {
+                active.blur();
+            }
             document.getElementById('modePickupBtn').classList.toggle('active', mode === 'pickup');
             document.getElementById('modeDeliveryBtn').classList.toggle('active', isDelivery);
-            document.getElementById('orderLocationWrap').classList.toggle('hidden', !isDelivery);
+            const locationWrap = document.getElementById('orderLocationWrap');
+            const locationInput = document.getElementById('orderLocationInput');
+            locationWrap.classList.toggle('hidden', !isDelivery);
             setOrderSendError('');
             if (isDelivery) {
-                document.getElementById('orderLocationInput').focus();
+                setTimeout(() => {
+                    locationInput.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    locationInput.focus();
+                }, 30);
             }
         }
 
@@ -2478,6 +2627,8 @@
         function resetOrderSendPanel() {
             currentOrderMode = null;
             document.getElementById('orderLocationWrap').classList.add('hidden');
+            document.getElementById('orderNameInput').value = '';
+            document.getElementById('orderPhoneInput').value = '';
             document.getElementById('orderLocationInput').value = '';
             document.getElementById('modePickupBtn').classList.remove('active');
             document.getElementById('modeDeliveryBtn').classList.remove('active');
@@ -2486,12 +2637,14 @@
 
         function confirmOrderSend() {
             if (cart.length === 0) return;
+            const customerName = document.getElementById('orderNameInput').value.trim();
+            const customerPhone = document.getElementById('orderPhoneInput').value.trim();
             if (!currentOrderMode) {
                 setOrderSendError('Elegi si lo queres delivery o pickup.');
                 return;
             }
             if (currentOrderMode === 'pickup') {
-                sendWhatsApp('pickup');
+                sendWhatsApp('pickup', '', customerName, customerPhone);
                 return;
             }
             const location = document.getElementById('orderLocationInput').value.trim();
@@ -2499,15 +2652,19 @@
                 setOrderSendError('Escribi la ubicacion para delivery.');
                 return;
             }
-            sendWhatsApp('delivery', location);
+            sendWhatsApp('delivery', location, customerName, customerPhone);
         }
 
         /* ── WHATSAPP ───────────────────────────────────────────────────── */
-        function sendWhatsApp(mode = 'pickup', location = '') {
+        function sendWhatsApp(mode = 'pickup', location = '', customerName = '', customerPhone = '') {
             if (cart.length === 0) return;
             const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            const totalBsLabel = formatBsFromUsd(total);
             let msg = `*Nuevo pedido - Que Sanguche*\n\n`;
+            if (customerName) msg += `*Nombre (opcional):* ${customerName}\n`;
+            if (customerPhone) msg += `*Telefono (opcional):* ${customerPhone}\n`;
             msg += `*Tipo:* ${mode === 'delivery' ? 'Delivery' : 'Pickup'}\n`;
+            if (bcvRate) msg += `*Tasa BCV:* Bs ${bcvRate.toFixed(2)}\n`;
             if (mode === 'delivery') {
                 msg += `*Ubicacion:* ${location}\n`;
             }
@@ -2520,9 +2677,13 @@
                 if (item.guarn.length > 0) {
                     item.guarn.forEach(g => { msg += `  • ${g}\n`; });
                 }
-                msg += `  $${(item.price * item.qty).toFixed(2)}\n\n`;
+                const itemUsdTotal = item.price * item.qty;
+                msg += `  ${formatUsd(itemUsdTotal)}\n`;
+                if (bcvRate) msg += `  Bs ${(itemUsdTotal * bcvRate).toFixed(2)}\n`;
+                msg += `\n`;
             });
-            msg += `*Total: $${total.toFixed(2)}*`;
+            msg += `*Total: ${formatUsd(total)}*`;
+            msg += `\n*Total en Bs: ${totalBsLabel}*`;
             resetOrderSendPanel();
             window.open(`https://wa.me/584245026456?text=${encodeURIComponent(msg)}`, '_blank');
         }
@@ -2530,6 +2691,7 @@
         /* ── INIT ───────────────────────────────────────────────────────── */
         renderMenu();
         updateCartUI();
+        loadBcvRate();
         setupNavTop();
         setupKeyboardFix();
     </script>
